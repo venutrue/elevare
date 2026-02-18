@@ -355,21 +355,15 @@ export default function Handovers() {
             label="Property"
             value={form.property_id}
             onChange={(e) => setForm({ ...form, property_id: e.target.value })}
-          >
-            <option value="">Select a property</option>
-            {(properties?.data || []).map((p) => (
-              <option key={p.id} value={p.id}>{p.name}</option>
-            ))}
-          </Select>
+            options={(properties?.data || []).map((p) => ({ value: p.id, label: p.name }))}
+            placeholder="Select a property"
+          />
           <Select
             label="Handover Type"
             value={form.handover_type}
             onChange={(e) => setForm({ ...form, handover_type: e.target.value })}
-          >
-            {HANDOVER_TYPES.map((t) => (
-              <option key={t} value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-            ))}
-          </Select>
+            options={HANDOVER_TYPE_OPTIONS}
+          />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Initiated Date"

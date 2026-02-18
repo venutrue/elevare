@@ -57,9 +57,21 @@ interface Property {
 
 // ---- Constants ----
 
-const POA_STATUSES = ['draft', 'active', 'expired', 'revoked'];
-const POA_TYPES = ['general', 'special', 'limited', 'durable'];
-const POA_SCOPES = ['full_management', 'sale', 'lease', 'legal_proceedings', 'banking', 'tax_matters', 'custom'];
+const POA_STATUS_FILTER = [
+  { value: '', label: 'All Statuses' }, { value: 'draft', label: 'Draft' },
+  { value: 'active', label: 'Active' }, { value: 'expired', label: 'Expired' },
+  { value: 'revoked', label: 'Revoked' },
+];
+const POA_TYPE_OPTIONS = [
+  { value: 'general', label: 'General' }, { value: 'special', label: 'Special' },
+  { value: 'limited', label: 'Limited' }, { value: 'durable', label: 'Durable' },
+];
+const POA_SCOPE_OPTIONS = [
+  { value: 'full_management', label: 'Full Management' }, { value: 'sale', label: 'Sale' },
+  { value: 'lease', label: 'Lease' }, { value: 'legal_proceedings', label: 'Legal Proceedings' },
+  { value: 'banking', label: 'Banking' }, { value: 'tax_matters', label: 'Tax Matters' },
+  { value: 'custom', label: 'Custom' },
+];
 
 function statusBadgeColor(status: string): 'green' | 'yellow' | 'red' | 'gray' {
   switch (status) {
@@ -199,12 +211,7 @@ export default function PowersOfAttorney() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
               />
             </div>
-            <Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-              <option value="">All Statuses</option>
-              {POA_STATUSES.map((s) => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </Select>
+            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none">{POA_STATUS_FILTER.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}</select>
           </div>
         </CardContent>
       </Card>
@@ -301,12 +308,9 @@ export default function PowersOfAttorney() {
             label="Property"
             value={form.property_id}
             onChange={(e) => setForm({ ...form, property_id: e.target.value })}
-          >
-            <option value="">Select a property</option>
-            {(properties?.data || []).map((p) => (
-              <option key={p.id} value={p.id}>{p.name}</option>
-            ))}
-          </Select>
+            options={(properties?.data || []).map((p) => ({ value: p.id, label: p.name }))}
+            placeholder="Select a property"
+          />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Owner Name"
@@ -326,20 +330,14 @@ export default function PowersOfAttorney() {
               label="PoA Type"
               value={form.poa_type}
               onChange={(e) => setForm({ ...form, poa_type: e.target.value })}
-            >
-              {POA_TYPES.map((t) => (
-                <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
-              ))}
-            </Select>
+              options={POA_TYPE_OPTIONS}
+            />
             <Select
               label="Scope"
               value={form.scope}
               onChange={(e) => setForm({ ...form, scope: e.target.value })}
-            >
-              {POA_SCOPES.map((s) => (
-                <option key={s} value={s}>{s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-              ))}
-            </Select>
+              options={POA_SCOPE_OPTIONS}
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Input

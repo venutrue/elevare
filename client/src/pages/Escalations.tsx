@@ -64,9 +64,21 @@ interface PaginatedResponse<T> {
 
 // ---- Constants ----
 
-const ENTITY_TYPES = ['maintenance', 'support_ticket', 'legal_case', 'compliance', 'inspection', 'construction'];
-const TRIGGER_CONDITIONS = ['sla_breach', 'status_stale', 'high_priority_unassigned', 'overdue', 'custom'];
-const ROLES = ['admin', 'manager', 'senior_manager', 'director', 'legal_head', 'operations_head'];
+const ENTITY_TYPE_OPTIONS = [
+  { value: 'maintenance', label: 'Maintenance' }, { value: 'support_ticket', label: 'Support Ticket' },
+  { value: 'legal_case', label: 'Legal Case' }, { value: 'compliance', label: 'Compliance' },
+  { value: 'inspection', label: 'Inspection' }, { value: 'construction', label: 'Construction' },
+];
+const TRIGGER_CONDITION_OPTIONS = [
+  { value: 'sla_breach', label: 'Sla Breach' }, { value: 'status_stale', label: 'Status Stale' },
+  { value: 'high_priority_unassigned', label: 'High Priority Unassigned' },
+  { value: 'overdue', label: 'Overdue' }, { value: 'custom', label: 'Custom' },
+];
+const ROLE_OPTIONS = [
+  { value: 'admin', label: 'Admin' }, { value: 'manager', label: 'Manager' },
+  { value: 'senior_manager', label: 'Senior Manager' }, { value: 'director', label: 'Director' },
+  { value: 'legal_head', label: 'Legal Head' }, { value: 'operations_head', label: 'Operations Head' },
+];
 
 function formatDate(d: string | null): string {
   if (!d) return '-';
@@ -425,31 +437,22 @@ export default function Escalations() {
               label="Entity Type"
               value={ruleForm.entity_type}
               onChange={(e) => setRuleForm({ ...ruleForm, entity_type: e.target.value })}
-            >
-              {ENTITY_TYPES.map((t) => (
-                <option key={t} value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-              ))}
-            </Select>
+              options={ENTITY_TYPE_OPTIONS}
+            />
             <Select
               label="Trigger Condition"
               value={ruleForm.trigger_condition}
               onChange={(e) => setRuleForm({ ...ruleForm, trigger_condition: e.target.value })}
-            >
-              {TRIGGER_CONDITIONS.map((t) => (
-                <option key={t} value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-              ))}
-            </Select>
+              options={TRIGGER_CONDITION_OPTIONS}
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Select
               label="Escalate To Role"
               value={ruleForm.escalate_to_role}
               onChange={(e) => setRuleForm({ ...ruleForm, escalate_to_role: e.target.value })}
-            >
-              {ROLES.map((r) => (
-                <option key={r} value={r}>{r.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-              ))}
-            </Select>
+              options={ROLE_OPTIONS}
+            />
             <Input
               label="Time Threshold (hours)"
               type="number"
@@ -480,11 +483,8 @@ export default function Escalations() {
             label="Entity Type"
             value={triggerForm.entity_type}
             onChange={(e) => setTriggerForm({ ...triggerForm, entity_type: e.target.value })}
-          >
-            {ENTITY_TYPES.map((t) => (
-              <option key={t} value={t}>{t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-            ))}
-          </Select>
+            options={ENTITY_TYPE_OPTIONS}
+          />
           <Input
             label="Entity ID"
             placeholder="ID of the entity to escalate"
